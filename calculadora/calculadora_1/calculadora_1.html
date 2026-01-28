@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Calculadora Tarjetas Revolving – Nueva Versión</title>
+  <meta name="description" content="Calcula cuánto dinero puedes recuperar de tu tarjeta revolving.">
+
+  <style>
+    /* VARIABLES DE COLOR */
+    :root {
+      --primary: #e68737; /* Naranja corporativo */
+      --primary-dark: #d67627;
+      --bg-gray: #f3f4f6;
+      --text-main: #1f2937;
+      --border-color: #e5e7eb;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+      color: var(--text-main);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* TARJETA PRINCIPAL */
+    .rev-card {
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 30px;
+      background: #fff;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+
+    .rev-title {
+      text-align: center;
+      margin: 0 0 10px 0;
+      font-size: 28px;
+      font-weight: 800;
+      color: #111;
+    }
+
+    .rev-sub {
+      text-align: center;
+      margin: 0 auto 30px auto;
+      max-width: 600px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    /* GRUPO DE INPUTS CON SLIDER */
+    .input-group {
+      margin-bottom: 24px;
+    }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .label-text {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    
+    .input-wrapper input[type="number"] {
+      width: 90px;
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      text-align: right;
+      transition: border-color 0.2s;
+    }
+    .input-wrapper input[type="number"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(230, 135, 55, 0.1);
+    }
+    .unit {
+      margin-left: 6px;
+      font-weight: 600;
+      color: #6b7280;
+      width: 20px;
+    }
+
+    /* ESTILO DEL SLIDER (RANGE) - MEJORADO */
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+      margin: 10px 0;
+      cursor: grab;
+    }
+    input[type=range]:active {
+      cursor: grabbing;
+    }
+    input[type=range]:focus { 
+      outline: none;
+    }
+
+    /* Barra del slider (Webkit) */
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      background: #e5e7eb;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    /* HOVER EN TRACK - MÁS ÉNFASIS */
+    input[type=range]:hover::-webkit-slider-runnable-track {
+      background-color: var(--primary);
+      box-shadow: 0 0 0 6px rgba(230, 135, 55, 0.15),
+                  0 4px 12px rgba(230, 135, 55, 0.3);
+      transform: scaleY(1.1);
+    }
+    
+    /* Botón del slider (Thumb - Webkit) */
+    input[type=range]::-webkit-slider-thumb {
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--primary);
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -9px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: all 0.2s ease;
+    }
+    
+    /* HOVER EN THUMB - MÁS ÉNFASIS */
+    input[type=range]:hover::-webkit-slider-thumb {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 6px rgba(230, 135, 55, 0.2),
+                  0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    /* ACTIVE EN THUMB */
+    input[type=range]:active::-webkit-slider-thumb {
+      transform: scale(1.15);
+      background: var(--primary);
+      box-shadow: 0 0 0 8px rgba(230, 135, 55, 0.25),
+                  0 6px 16px rgba(0,0,0,0.25);
+    }
+    
+    /* Firefox styles */
+    input[type=range]::-moz-range-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      background: #e5e7eb;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    input[type=range]:hover::-moz-range-track {
+      background: var(--primary);
+      box-shadow: 0 0 0 6px rgba(230, 135, 55, 0.15);
+    }
+    
+    input[type=range]::-moz-range-thumb {
+      height: 24px;
+      width: 24px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    input[type=range]:hover::-moz-range-thumb {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 6px rgba(230, 135, 55, 0.2);
+    }
+
+    input[type=range]:active::-moz-range-thumb {
+      background: var(--primary);
+      box-shadow: 0 0 0 8px rgba(230, 135, 55, 0.25);
+    }
+
+    /* TOGGLE MESES / AÑOS */
+    .time-toggle {
+      display: inline-flex;
+      background: #f3f4f6;
+      padding: 4px;
+      border-radius: 8px;
+      margin-right: 10px;
+    }
+    .time-toggle label {
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+      color: #6b7280;
+      transition: all 0.2s;
+    }
+    .time-toggle input[type="radio"] {
+      display: none;
+    }
+    .time-toggle input[type="radio"]:checked + span {
+      background: #fff;
+      color: var(--primary);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    /* EXTRAS (CHECKBOXES) */
+    .rev-extra {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #f3f4f6;
+      flex-wrap: wrap;
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s;
+    }
+    .checkbox-label:hover {
+      color: var(--primary);
+    }
+    .checkbox-label input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* BOTÓN CALCULAR */
+    .btn-wrap {
+      margin-top: 30px;
+      text-align: center;
+    }
+    #calcBtn {
+      background: #111;
+      color: #fff;
+      border: none;
+      padding: 14px 40px;
+      font-size: 18px;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #calcBtn:hover {
+      background: #333;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    #calcBtn:active {
+      transform: translateY(0);
+    }
+
+    /* RESULTADOS */
+    .rev-results {
+      margin-top: 30px;
+      background: #fafafa;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 24px;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn { 
+      from { opacity:0; transform:translateY(10px); } 
+      to { opacity:1; transform:translateY(0); } 
+    }
+
+    .result-main {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .result-amount {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: block;
+      line-height: 1;
+      margin: 10px 0;
+    }
+    .result-sub { 
+      font-size: 14px; 
+      color: #6b7280; 
+    }
+
+    /* CTA FINAL (RECLAMAR) */
+    .cta-box {
+      background: #fff5eb;
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    #ctaBtn {
+      background: var(--primary);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 800;
+      padding: 16px 32px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 8px 20px rgba(230, 135, 55, 0.4);
+      animation: pulse 2s infinite;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    #ctaBtn:hover { 
+      filter: brightness(0.95);
+      transform: scale(1.02);
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(230, 135, 55, 0.7); }
+      70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(230, 135, 55, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(230, 135, 55, 0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .rev-card { padding: 20px; }
+      .result-amount { font-size: 2.2rem; }
+      .label-row { flex-wrap: wrap; }
+      .time-toggle { margin-bottom: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+    <section class="rev-card">
+      <h1 class="rev-title">Calculadora Tarjetas Revolving</h1>
+      <p class="rev-sub">Calcula al instante lo que puedes llegar a recuperar si tu tarjeta tiene intereses abusivos.</p>
+
+      <div class="input-group">
+        <div class="label-row">
+          <label class="label-text">Deuda pendiente aproximada</label>
+          <div class="input-wrapper">
+            <input id="saldo" type="number" min="0" value="5000"> <span class="unit">€</span>
+          </div>
+        </div>
+        <input id="saldoRange" type="range" min="0" max="30000" step="100" value="5000">
+      </div>
+
+      <div class="input-group">
+        <div class="label-row">
+          <label class="label-text">Cuota que estás pagando</label>
+          <div class="input-wrapper">
+            <input id="cuota" type="number" min="0" value="150"> <span class="unit">€</span>
+          </div>
+        </div>
+        <input id="cuotaRange" type="range" min="0" max="1000" step="10" value="150">
+      </div>
+
+      <div class="input-group">
+        <div class="label-row">
+          <label class="label-text">TAE (Interés)</label>
+          <div class="input-wrapper">
+            <input id="tae" type="number" min="0" value="24"> <span class="unit">%</span>
+          </div>
+        </div>
+        <input id="taeRange" type="range" min="0" max="40" step="0.5" value="24">
+      </div>
+
+      <div class="input-group">
+        <div class="label-row">
+          <label class="label-text">Tiempo pagando</label>
+          <div style="display:flex; align-items:center;">
+            <div class="time-toggle">
+              <label>
+                <input type="radio" name="timeUnit" value="years" checked>
+                <span>Años</span>
+              </label>
+              <label>
+                <input type="radio" name="timeUnit" value="months">
+                <span>Meses</span>
+              </label>
+            </div>
+            <div class="input-wrapper">
+              <input id="tiempo" type="number" min="0" value="5">
+            </div>
+          </div>
+        </div>
+        <input id="tiempoRange" type="range" min="0" max="30" step="1" value="5">
+      </div>
+
+      <div class="rev-extra">
+        <label class="checkbox-label">
+          <input id="tieneSeguro" type="checkbox"> Tengo seguro de protección de pagos
+        </label>
+        <label class="checkbox-label">
+          <input id="hayImpagos" type="checkbox"> He tenido recibos impagados
+        </label>
+      </div>
+
+      <div class="btn-wrap">
+        <button id="calcBtn">Calcular Devolución</button>
+      </div>
+
+      <div id="results" class="rev-results">
+        <div class="result-main">
+          <p style="margin:0; font-weight:600; font-size:18px;">Podrías recuperar hasta:</p>
+          <span id="totalRecuperar" class="result-amount">0 €</span>
+          <p class="result-sub">*Estimación basada en tus datos actuales.</p>
+        </div>
+
+        <div style="font-size:14px; color:#555; border-top:1px solid #eee; padding-top:15px;">
+           <p style="display:flex; justify-content:space-between; margin:5px 0;">
+             <span>Intereses abusivos:</span> <strong id="resIntereses">-</strong>
+           </p>
+           <p id="lineaSeguro" style="display:flex; justify-content:space-between; margin:5px 0; color:var(--primary);">
+             <span>Seguro (estimado):</span> <strong id="resSeguro">-</strong>
+           </p>
+           <p id="lineaImpagos" style="display:flex; justify-content:space-between; margin:5px 0; color:var(--primary);">
+             <span>Comisiones impago:</span> <strong id="resImpagos">-</strong>
+           </p>
+        </div>
+
+        <div class="cta-box">
+          <p style="margin:0 0 10px 0; font-weight:700;">Reclama con nosotros y si no ganamos, no cobramos.</p>
+          <form id="claimForm" method="GET" target="_blank" action="https://reclamaciones.donrecuperador.com/">
+             <input type="hidden" name="deuda" id="f_deuda">
+             <input type="hidden" name="recuperable" id="f_recuperable">
+             <button type="submit" id="ctaBtn">REALIZAR ESTUDIO GRATUITO</button>
+          </form>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      // Elementos del DOM
+      const els = {
+        saldo: document.getElementById('saldo'),
+        saldoRange: document.getElementById('saldoRange'),
+        cuota: document.getElementById('cuota'),
+        cuotaRange: document.getElementById('cuotaRange'),
+        tae: document.getElementById('tae'),
+        taeRange: document.getElementById('taeRange'),
+        tiempo: document.getElementById('tiempo'),
+        tiempoRange: document.getElementById('tiempoRange'),
+        timeRadios: document.getElementsByName('timeUnit'),
+        tieneSeguro: document.getElementById('tieneSeguro'),
+        hayImpagos: document.getElementById('hayImpagos'),
+        calcBtn: document.getElementById('calcBtn'),
+        results: document.getElementById('results'),
+        
+        // Displays de resultados
+        totalRecuperar: document.getElementById('totalRecuperar'),
+        resIntereses: document.getElementById('resIntereses'),
+        resSeguro: document.getElementById('resSeguro'),
+        resImpagos: document.getElementById('resImpagos'),
+        lineaSeguro: document.getElementById('lineaSeguro'),
+        lineaImpagos: document.getElementById('lineaImpagos'),
+        
+        // Form hidden inputs
+        f_deuda: document.getElementById('f_deuda'),
+        f_recuperable: document.getElementById('f_recuperable')
+      };
+
+      const nfmt = new Intl.NumberFormat('es-ES', {
+        style:'currency', currency:'EUR', minimumFractionDigits:0, maximumFractionDigits:0
+      });
+
+      // 1. SINCRONIZACIÓN INPUTS <-> SLIDERS
+      function sync(input, range) {
+        // Cuando cambia el texto
+        input.addEventListener('input', () => {
+          range.value = input.value;
+          updateRangeColor(range);
+        });
+        // Cuando cambia el slider
+        range.addEventListener('input', () => {
+          input.value = range.value;
+          updateRangeColor(range);
+        });
+        // Inicializar color
+        updateRangeColor(range);
+      }
+
+      // Efecto visual de progreso en el slider
+      function updateRangeColor(range) {
+        const val = (range.value - range.min) / (range.max - range.min) * 100;
+        range.style.background = `linear-gradient(to right, var(--primary) ${val}%, #e5e7eb ${val}%)`;
+      }
+
+      sync(els.saldo, els.saldoRange);
+      sync(els.cuota, els.cuotaRange);
+      sync(els.tae, els.taeRange);
+      sync(els.tiempo, els.tiempoRange);
+
+      // 2. LÓGICA AÑOS VS MESES
+      let isYears = true; // Por defecto
+      
+      function handleTimeUnitChange(e) {
+        const val = parseFloat(els.tiempo.value) || 0;
+        
+        if (e.target.value === 'years') {
+          // Cambiamos a Años
+          isYears = true;
+          // Convertimos visualmente: 24 meses -> 2 años
+          const newYears = parseFloat((val / 12).toFixed(1));
+          els.tiempo.value = newYears;
+          // Ajustamos rango del slider
+          els.tiempoRange.min = 0;
+          els.tiempoRange.max = 30; // 30 años max
+          els.tiempoRange.step = 0.5;
+          els.tiempoRange.value = newYears;
+        } else {
+          // Cambiamos a Meses
+          isYears = false;
+          // Convertimos visualmente: 2 años -> 24 meses
+          const newMonths = Math.round(val * 12);
+          els.tiempo.value = newMonths;
+          // Ajustamos rango del slider
+          els.tiempoRange.min = 0;
+          els.tiempoRange.max = 360; // 30 años * 12
+          els.tiempoRange.step = 1;
+          els.tiempoRange.value = newMonths;
+        }
+        updateRangeColor(els.tiempoRange);
+      }
+
+      Array.from(els.timeRadios).forEach(radio => {
+        radio.addEventListener('change', handleTimeUnitChange);
+      });
+
+      // 3. LÓGICA DE CÁLCULO
+      function calcular() {
+        const saldo = parseFloat(els.saldo.value) || 0;
+        const cuota = parseFloat(els.cuota.value) || 0;
+        const tae = parseFloat(els.tae.value) || 0;
+        let tiempoInput = parseFloat(els.tiempo.value) || 0;
+
+        // Normalizar tiempo a MESES para el cálculo interno
+        let mesesTotales = isYears ? (tiempoInput * 12) : tiempoInput;
+
+        // Validaciones básicas
+        if(mesesTotales < 1) mesesTotales = 1;
+
+        // --- Lógica Financiera (Aproximación "Revolving") ---
+        // K es un factor de amortización estimado.
+        // Si pagas poco respecto a la deuda, K es mayor (intereses perpetuos).
+        let K = 60; 
+        const ratio = (saldo / (cuota * mesesTotales));
+        if (ratio >= 2.2) K = 65; 
+
+        // Base recuperable: Cuota * Meses * (TAE / K)
+        // Esta es una fórmula heurística usada en landing pages para estimar sobrecoste.
+        const recuperacionBase = cuota * mesesTotales * (tae / K);
+
+        // Extras
+        // Seguro: Si lo tiene, sumamos un ~20% extra sobre la base
+        const extraSeguro = els.tieneSeguro.checked ? (recuperacionBase * 0.20) : 0;
+        
+        // Impagos: Coste fijo estimado (ej. 150€) si marca que ha tenido impagos
+        const extraImpagos = els.hayImpagos.checked ? 150 : 0;
+
+        const total = recuperacionBase + extraSeguro + extraImpagos;
+
+        // Renderizar
+        els.totalRecuperar.textContent = nfmt.format(total);
+        els.resIntereses.textContent = nfmt.format(recuperacionBase);
+        
+        // Mostrar/Ocultar detalles
+        if (els.tieneSeguro.checked) {
+          els.resSeguro.textContent = "+ " + nfmt.format(extraSeguro);
+          els.lineaSeguro.style.display = 'flex';
+        } else {
+          els.lineaSeguro.style.display = 'none';
+        }
+
+        if (els.hayImpagos.checked) {
+          els.resImpagos.textContent = "+ " + nfmt.format(extraImpagos);
+          els.lineaImpagos.style.display = 'flex';
+        } else {
+          els.lineaImpagos.style.display = 'none';
+        }
+
+        // Rellenar formulario oculto para CRM
+        els.f_deuda.value = saldo;
+        els.f_recuperable.value = Math.round(total);
+
+        // Mostrar caja de resultados
+        els.results.style.display = 'block';
+        
+        // Scroll suave hacia resultados
+        els.results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      els.calcBtn.addEventListener('click', calcular);
+
+    })();
+  </script>
+</body>
+</html>

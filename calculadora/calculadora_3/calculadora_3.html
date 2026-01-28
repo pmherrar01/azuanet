@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Calculadora Tarjetas Revolving – Nueva Versión</title>
+  <meta name="description" content="Calcula cuánto dinero puedes recuperar de tu tarjeta revolving.">
+
+  <style>
+    /* VARIABLES DE COLOR */
+    :root {
+      --primary: #e68737;
+      --primary-dark: #d67627;
+      --bg-gray: #f3f4f6;
+      --text-main: #1f2937;
+      --border-color: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+      color: var(--text-main);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* TARJETA PRINCIPAL */
+    .rev-card {
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 30px;
+      background: #fff;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+
+    .rev-title {
+      text-align: center;
+      margin: 0 0 10px 0;
+      font-size: 28px;
+      font-weight: 800;
+      color: #111;
+    }
+
+    .rev-sub {
+      text-align: center;
+      margin: 0 auto 30px auto;
+      max-width: 600px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    /* GRUPO DE INPUTS CON SLIDER */
+    .input-group {
+      margin-bottom: 24px;
+    }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .label-text {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    
+    .input-wrapper input[type="number"] {
+      width: 90px;
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      text-align: right;
+      transition: border-color 0.2s;
+    }
+    .input-wrapper input[type="number"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(230, 135, 55, 0.1);
+    }
+    .unit {
+      margin-left: 6px;
+      font-weight: 600;
+      color: #6b7280;
+      width: 20px;
+    }
+
+    /* ESTILO DEL SLIDER (RANGE) */
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+      margin: 10px 0;
+      cursor: grab;
+    }
+    input[type=range]:active {
+      cursor: grabbing;
+    }
+    input[type=range]:focus { 
+      outline: none;
+    }
+
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      background: #e5e7eb;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    input[type=range]:hover::-webkit-slider-runnable-track {
+      background-color: var(--primary);
+      box-shadow: 0 0 0 6px rgba(230, 135, 55, 0.15),
+                  0 4px 12px rgba(230, 135, 55, 0.3);
+      transform: scaleY(1.1);
+    }
+    
+    input[type=range]::-webkit-slider-thumb {
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--primary);
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -9px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: all 0.2s ease;
+    }
+    
+    input[type=range]:hover::-webkit-slider-thumb {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 6px rgba(230, 135, 55, 0.2),
+                  0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    input[type=range]:active::-webkit-slider-thumb {
+      transform: scale(1.15);
+      background: var(--primary);
+      box-shadow: 0 0 0 8px rgba(230, 135, 55, 0.25),
+                  0 6px 16px rgba(0,0,0,0.25);
+    }
+    
+    input[type=range]::-moz-range-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      background: #e5e7eb;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    input[type=range]:hover::-moz-range-track {
+      background: var(--primary);
+      box-shadow: 0 0 0 6px rgba(230, 135, 55, 0.15);
+    }
+    
+    input[type=range]::-moz-range-thumb {
+      height: 24px;
+      width: 24px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    input[type=range]:hover::-moz-range-thumb {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 6px rgba(230, 135, 55, 0.2);
+    }
+
+    input[type=range]:active::-moz-range-thumb {
+      background: var(--primary);
+      box-shadow: 0 0 0 8px rgba(230, 135, 55, 0.25);
+    }
+
+    /* TOGGLE MESES / AÑOS */
+    .time-toggle {
+      display: inline-flex;
+      background: #f3f4f6;
+      padding: 4px;
+      border-radius: 8px;
+      margin-right: 10px;
+    }
+    .time-toggle label {
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+      color: #6b7280;
+      transition: all 0.2s;
+    }
+    .time-toggle input[type="radio"] {
+      display: none;
+    }
+    .time-toggle input[type="radio"]:checked + span {
+      background: #fff;
+      color: var(--primary);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    /* EXTRAS (CHECKBOXES) */
+    .rev-extra {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #f3f4f6;
+      flex-wrap: wrap;
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s;
+    }
+    .checkbox-label:hover {
+      color: var(--primary);
+    }
+    .checkbox-label input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* BOTÓN CALCULAR */
+    .btn-wrap {
+      margin-top: 30px;
+      text-align: center;
+    }
+    #calcBtn {
+      background: #111;
+      color: #fff;
+      border: none;
+      padding: 14px 40px;
+      font-size: 18px;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #calcBtn:hover {
+      background: #333;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    #calcBtn:active {
+      transform: translateY(0);
+    }
+
+    /* RESULTADOS */
+    .rev-results {
+      margin-top: 30px;
+      background: #fafafa;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 24px;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn { 
+      from { opacity:0; transform:translateY(10px); } 
+      to { opacity:1; transform:translateY(0); } 
+    }
+
+    .result-main {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .result-amount {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: block;
+      line-height: 1;
+      margin: 10px 0;
+    }
+    .result-sub { 
+      font-size: 14px; 
+      color: #6b7280; 
+    }
+
+    /* CTA BOX */
+    .cta-box {
+      background: #fff5eb;
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    #ctaBtn {
+      background: var(--primary);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 800;
+      padding: 16px 32px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 8px 20px rgba(230, 135, 55, 0.4);
+      animation: pulse 2s infinite;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    #ctaBtn:hover { 
+      filter: brightness(0.95);
+      transform: scale(1.02);
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(230, 135, 55, 0.7); }
+      70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(230, 135, 55, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(230, 135, 55, 0); }
+    }
+
+    /* ============================================ */
+    /* MODAL FORMULARIO DE LEAD */
+    /* ============================================ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 40px 30px;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideUp 0.4s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #999;
+      transition: color 0.2s;
+    }
+    .modal-close:hover {
+      color: #333;
+    }
+
+    .modal-title {
+      margin: 0 0 10px 0;
+      font-size: 24px;
+      font-weight: 800;
+      color: #111;
+      text-align: center;
+    }
+
+    .modal-subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 15px;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+
+    /* FORM STYLES */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #374151;
+    }
+
+    .form-label .required {
+      color: var(--primary);
+      margin-left: 2px;
+    }
+
+    .form-input,
+    .form-select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(230, 135, 55, 0.1);
+    }
+
+    .form-select {
+      cursor: pointer;
+      background: #fff;
+    }
+
+    .form-checkbox-group {
+      margin-bottom: 15px;
+    }
+
+    .form-checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      color: #4b5563;
+      line-height: 1.4;
+    }
+
+    .form-checkbox-label input[type="checkbox"] {
+      margin-top: 2px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .form-checkbox-label a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .form-checkbox-label a:hover {
+      text-decoration: underline;
+    }
+
+    .form-submit {
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+
+    .form-submit:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(230, 135, 55, 0.4);
+    }
+
+    .form-submit:active {
+      transform: translateY(0);
+    }
+
+    .form-submit:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .form-message {
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .form-message.success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #6ee7b7;
+    }
+
+    .form-message.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .rev-card { padding: 20px; }
+      .result-amount { font-size: 2.2rem; }
+      .label-row { flex-wrap: wrap; }
+      .time-toggle { margin-bottom: 8px; }
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      .modal-content {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+    <section class="rev-card">
+      <h1 class="rev-title">Calculadora Tarjetas Revolving</h1>
+      <p class="rev-sub">Calcula al instante lo que puedes llegar a recuperar si tu tarjeta tiene intereses abusivos.</p>
+
+      <div class="input-group">
+        <div class="label-row">
+          <label class="label-text">Deuda pendiente aproximada</label>
+          <div class="input-wrapper">
+            <input id="saldo" type="number" min="0" value="5000"> <span class="unit">€</span>
+          </div>
+        </div>
+        <input id="saldoRange" type="range" min="0" max="30000" step="100" value="5000">
+      </div>
+
+      <div class="input-group">
+        <div class="label-row">
+          <label class="label-text">Cuota que estás pagando</label>
+          <div class="input-wrapper">
+            <input id="cuota" type="number" min="0" value="150"> <span class="unit">€</span>
+          </div>
+        </div>
+        <input id="cuotaRange" type="range" min="0" max="1000" step="10" value="150">
+      </div>
+
+      <div class="input-group">
+        <div class="label-row">
+          <label class="label-text">TAE (Interés)</label>
+          <div class="input-wrapper">
+            <input id="tae" type="number" min="0" value="24"> <span class="unit">%</span>
+          </div>
+        </div>
+        <input id="taeRange" type="range" min="0" max="40" step="0.5" value="24">
+      </div>
+
+      <div class="input-group">
+        <div class="label-row">
+          <label class="label-text">Tiempo pagando</label>
+          <div style="display:flex; align-items:center;">
+            <div class="time-toggle">
+              <label>
+                <input type="radio" name="timeUnit" value="years" checked>
+                <span>Años</span>
+              </label>
+              <label>
+                <input type="radio" name="timeUnit" value="months">
+                <span>Meses</span>
+              </label>
+            </div>
+            <div class="input-wrapper">
+              <input id="tiempo" type="number" min="0" value="5">
+            </div>
+          </div>
+        </div>
+        <input id="tiempoRange" type="range" min="0" max="30" step="1" value="5">
+      </div>
+
+      <div class="rev-extra">
+        <label class="checkbox-label">
+          <input id="tieneSeguro" type="checkbox"> Tengo seguro de protección de pagos
+        </label>
+        <label class="checkbox-label">
+          <input id="hayImpagos" type="checkbox"> He tenido recibos impagados
+        </label>
+      </div>
+
+      <div class="btn-wrap">
+        <button id="calcBtn">Calcular Devolución</button>
+      </div>
+
+      <div id="results" class="rev-results">
+        <div class="result-main">
+          <p style="margin:0; font-weight:600; font-size:18px;">Podrías recuperar hasta:</p>
+          <span id="totalRecuperar" class="result-amount">0 €</span>
+          <p class="result-sub">*Estimación basada en tus datos actuales.</p>
+        </div>
+
+        <div style="font-size:14px; color:#555; border-top:1px solid #eee; padding-top:15px;">
+           <p style="display:flex; justify-content:space-between; margin:5px 0;">
+             <span>Intereses abusivos:</span> <strong id="resIntereses">-</strong>
+           </p>
+           <p id="lineaSeguro" style="display:flex; justify-content:space-between; margin:5px 0; color:var(--primary);">
+             <span>Seguro (estimado):</span> <strong id="resSeguro">-</strong>
+           </p>
+           <p id="lineaImpagos" style="display:flex; justify-content:space-between; margin:5px 0; color:var(--primary);">
+             <span>Comisiones impago:</span> <strong id="resImpagos">-</strong>
+           </p>
+        </div>
+
+        <div class="cta-box">
+          <p style="margin:0 0 10px 0; font-weight:700;">Reclama con nosotros y si no ganamos, no cobramos.</p>
+          <button type="button" id="ctaBtn">REALIZAR ESTUDIO GRATUITO</button>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- MODAL FORMULARIO -->
+  <div id="leadModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose">&times;</button>
+      
+      <h2 class="modal-title">Reclamación Online Gratis</h2>
+      <p class="modal-subtitle">
+        Reclama lo que es tuyo sin compromiso. Hemos conseguido más de 5000 demandas favorables. 
+        Infórmate sin compromiso y puedes cancelar el proceso cuando lo desees.
+      </p>
+
+      <div id="formMessage" class="form-message"></div>
+
+      <form id="leadForm">
+        <!-- Campos ocultos con datos de la calculadora -->
+        <input type="hidden" name="deuda" id="form_deuda">
+        <input type="hidden" name="cuota" id="form_cuota">
+        <input type="hidden" name="tae" id="form_tae">
+        <input type="hidden" name="tiempo_pagando" id="form_tiempo">
+        <input type="hidden" name="recuperable" id="form_recuperable">
+        <input type="hidden" name="tiene_seguro" id="form_seguro">
+        <input type="hidden" name="hay_impagos" id="form_impagos">
+
+        <!-- HONEYPOT - Campo trampa para bots (NO BORRAR) -->
+        <input type="text" name="website" value="" style="display:none !important;" tabindex="-1" autocomplete="off">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">¿Cómo te llamas? <span class="required">*</span></label>
+            <input type="text" name="nombre" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tu Teléfono <span class="required">*</span></label>
+            <input type="tel" name="telefono" class="form-input" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Tu Email <span class="required">*</span></label>
+          <input type="email" name="email" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">¿Qué Entidad financiera tienes? <span class="required">*</span></label>
+          <select name="entidad" class="form-select" required>
+            <option value="">Selecciona una entidad</option>
+            <option value="4Finance Spain Financial Services, S.A.U (ZAPLO)">4Finance Spain Financial Services, S.A.U (ZAPLO)</option>
+            <option value="ABANCA CORPORACION BANCARIA , S.A.,">ABANCA CORPORACION BANCARIA , S.A.,</option>
+            <option value="ADVANZIA BANK S.A.">ADVANZIA BANK S.A.</option>
+            <option value="American Express">American Express</option>
+            <option value="AXICARD">AXICARD</option>
+            <option value="AZLO">AZLO</option>
+            <option value="BANCO SANTANDER, S.A">BANCO SANTANDER, S.A</option>
+            <option value="BANK NORWEGIAN">BANK NORWEGIAN</option>
+            <option value="BANKINTER">BANKINTER</option>
+            <option value="BBVA">BBVA</option>
+            <option value="BIGBANK AS Consumer Finance">BIGBANK AS Consumer Finance</option>
+            <option value="BONDORA">BONDORA</option>
+            <option value="CABOT SECURITISATION EUROPE LIMITED">CABOT SECURITISATION EUROPE LIMITED</option>
+            <option value="Caixabank Consumer Finance">Caixabank Consumer Finance</option>
+            <option value="CAJA ALMENDRALEJO">CAJA ALMENDRALEJO</option>
+            <option value="CAJA RURAL CENTRAL">CAJA RURAL CENTRAL</option>
+            <option value="Caja Rural de Aragón S.C.C.">Caja Rural de Aragón S.C.C.</option>
+            <option value="CAJA RURAL DE ASTURIAS SOCIEDAD COOPERATIVA DE CREDITO">CAJA RURAL DE ASTURIAS SOCIEDAD COOPERATIVA DE CREDITO</option>
+            <option value="CAJA RURAL DE EXTREMADURA">CAJA RURAL DE EXTREMADURA</option>
+            <option value="CAJA RURAL DE GRANADA">CAJA RURAL DE GRANADA</option>
+            <option value="Caja Rural de Navarra S.Coop">Caja Rural de Navarra S.Coop</option>
+            <option value="CAJA RURAL DE ZAMORA">CAJA RURAL DE ZAMORA</option>
+            <option value="CAJA RURAL DEL SUR, S.C.C.">CAJA RURAL DEL SUR, S.C.C.</option>
+            <option value="CAJA SIETE">CAJA SIETE</option>
+            <option value="CAJAMAR">CAJAMAR</option>
+            <option value="CASHPER">CASHPER</option>
+            <option value="CETELEM">CETELEM</option>
+            <option value="CHAMPLOAN">CHAMPLOAN</option>
+            <option value="COFIDIS">COFIDIS</option>
+            <option value="COZMO">COZMO</option>
+            <option value="Creamfinance Spain, S.L.U">Creamfinance Spain, S.L.U</option>
+            <option value="CREDISTAR">CREDISTAR</option>
+            <option value="CREDITERO">CREDITERO</option>
+            <option value="CREDITO A DOMICILIO SL">CREDITO A DOMICILIO SL</option>
+            <option value="CREDITO POSTAL">CREDITO POSTAL</option>
+            <option value="CREDITOMAS">CREDITOMAS</option>
+            <option value="CREDITOSI">CREDITOSI</option>
+            <option value="DANEIO ; AMARO SERVICIOS INTEGRALES S.L.">DANEIO ; AMARO SERVICIOS INTEGRALES S.L.</option>
+            <option value="DEUTSCHE BANK">DEUTSCHE BANK</option>
+            <option value="DINEO">DINEO</option>
+            <option value="DINEVO">DINEVO</option>
+            <option value="DISPON">DISPON</option>
+            <option value="EOS SPAIN SL">EOS SPAIN SL</option>
+            <option value="EUROCAJARURAL">EUROCAJARURAL</option>
+            <option value="FCA CAPITAL SPAIN EFC S.A.">FCA CAPITAL SPAIN EFC S.A.</option>
+            <option value="FERRATUM BANK">FERRATUM BANK</option>
+            <option value="FIDINDA">FIDINDA</option>
+            <option value="FINANCIERA EL CORTE INGLES E.F.C., S.A">FINANCIERA EL CORTE INGLES E.F.C., S.A</option>
+            <option value="FINANCIERA ESPAÑOLA DE CREDITO A DISTANCIA, EFC,SA">FINANCIERA ESPAÑOLA DE CREDITO A DISTANCIA, EFC,SA</option>
+            <option value="FINDYA">FINDYA</option>
+            <option value="FINJET">FINJET</option>
+            <option value="FINTIA (ABUNTIA SERVICES, S.L.)">FINTIA (ABUNTIA SERVICES, S.L.)</option>
+            <option value="FLEXILINE">FLEXILINE</option>
+            <option value="GLOBALCAJA">GLOBALCAJA</option>
+            <option value="GUSUDURU SL">GUSUDURU SL</option>
+            <option value="GUSUDURU, S.L.U.">GUSUDURU, S.L.U.</option>
+            <option value="IBANCAR WORLD SRL">IBANCAR WORLD SRL</option>
+            <option value="Ibercaja Banco, S.A.">Ibercaja Banco, S.A.</option>
+            <option value="IBERCRÉDITO ONLINE S.L">IBERCRÉDITO ONLINE S.L</option>
+            <option value="IBERCRÉDITO RÁPIDO SL">IBERCRÉDITO RÁPIDO SL</option>
+            <option value="Iberia Cards">Iberia Cards</option>
+            <option value="ING DIRECT">ING DIRECT</option>
+            <option value="INTRUM SERVICING SPAIN, S.A.U">INTRUM SERVICING SPAIN, S.A.U</option>
+            <option value="InvestCapital Ltd">InvestCapital Ltd</option>
+            <option value="Kutxabank, S.A.">Kutxabank, S.A.</option>
+            <option value="KVIKU SPAIN, S.L.">KVIKU SPAIN, S.L.</option>
+            <option value="LENDROCK SPAIN SL">LENDROCK SPAIN SL</option>
+            <option value="LOANEY FINANCE SL">LOANEY FINANCE SL</option>
+            <option value="Medius Collection S.L.">Medius Collection S.L.</option>
+            <option value="MI PRESTAMO">MI PRESTAMO</option>
+            <option value="MONEY GARANTIZADO, S.L.U. (moneymas)">MONEY GARANTIZADO, S.L.U. (moneymas)</option>
+            <option value="MONEYGO">MONEYGO</option>
+            <option value="MONEYMAN">MONEYMAN</option>
+            <option value="MOVINERO">MOVINERO</option>
+            <option value="MY KREDIT">MY KREDIT</option>
+            <option value="NEXTGEN FINANCIAL SERVICES, S.L. (WANNA)">NEXTGEN FINANCIAL SERVICES, S.L. (WANNA)</option>
+            <option value="NEXU">NEXU</option>
+            <option value="Nuevo Micro Bank, S.A.U.">Nuevo Micro Bank, S.A.U.</option>
+            <option value="Oney">Oney</option>
+            <option value="OPEN BANK , S.A.">OPEN BANK , S.A.</option>
+            <option value="Pareto Créditos España SL">Pareto Créditos España SL</option>
+            <option value="PEPPER FINANCE CORPORATION, S.L.U.">PEPPER FINANCE CORPORATION, S.L.U.</option>
+            <option value="PLAZO">PLAZO</option>
+            <option value="PRA Iberia, S.L.U.">PRA Iberia, S.L.U.</option>
+            <option value="PRESTAMER">PRESTAMER</option>
+            <option value="QUEBUENO">QUEBUENO</option>
+            <option value="RCI BANQUE">RCI BANQUE</option>
+            <option value="REDDO CREDIT">REDDO CREDIT</option>
+            <option value="Respaldo España, S.L. (RESUELVE CREDITO)">Respaldo España, S.L. (RESUELVE CREDITO)</option>
+            <option value="SABADELL">SABADELL</option>
+            <option value="Santander Consumer Finance">Santander Consumer Finance</option>
+            <option value="SAVSO SPAIN S.L.U">SAVSO SPAIN S.L.U</option>
+            <option value="SEQURA WORLDWIDE SA">SEQURA WORLDWIDE SA</option>
+            <option value="SERVICIOS FINANCIEROS CARREFOUR , E.F.C.,">SERVICIOS FINANCIEROS CARREFOUR , E.F.C.,</option>
+            <option value="SF PRESTAMOS SL (LUZO)">SF PRESTAMOS SL (LUZO)</option>
+            <option value="SIMPLEROS SL">SIMPLEROS SL</option>
+            <option value="SMARTCREDITO">SMARTCREDITO</option>
+            <option value="SOLUCIONES DIGITALES CRX, S.L (Necesito Dinero)">SOLUCIONES DIGITALES CRX, S.L (Necesito Dinero)</option>
+            <option value="SPYMP (antes MBNA, EVO, LC ASSET)">SPYMP (antes MBNA, EVO, LC ASSET)</option>
+            <option value="TAMGA FINANCE SL">TAMGA FINANCE SL</option>
+            <option value="TF Bank AB">TF Bank AB</option>
+            <option value="TWINERO">TWINERO</option>
+            <option value="UCI (Unión de Créditos Inmobiliarios)">UCI (Unión de Créditos Inmobiliarios)</option>
+            <option value="UNICAJA S.A">UNICAJA S.A</option>
+            <option value="UNION FINANCIERA ASTURIANA">UNION FINANCIERA ASTURIANA</option>
+            <option value="VIACONTO MINICREDIT, S.L.">VIACONTO MINICREDIT, S.L.</option>
+            <option value="VIVUS">VIVUS</option>
+            <option value="WANDOO">WANDOO</option>
+            <option value="WELP">WELP</option>
+            <option value="WIZINK BANK (antes Citibank)">WIZINK BANK (antes Citibank)</option>
+            <option value="Younited S.A">Younited S.A</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="form-checkbox-group">
+          <label class="form-checkbox-label">
+            <input type="checkbox" name="asesor" value="1">
+            <span>Deseo que un asesor me llame para darme información y ayudarme en mi caso.</span>
+          </label>
+        </div>
+
+        <div class="form-checkbox-group">
+          <label class="form-checkbox-label">
+            <input type="checkbox" name="privacidad" required>
+            <span>Acepto la <a href="#" target="_blank">Política de Privacidad</a> y los <a href="#" target="_blank">Términos y condiciones de uso</a> <span class="required">*</span></span>
+          </label>
+        </div>
+
+        <button type="submit" class="form-submit" id="submitBtn">Enviar</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // ========================================
+      // ELEMENTOS DEL DOM
+      // ========================================
+      const els = {
+        saldo: document.getElementById('saldo'),
+        saldoRange: document.getElementById('saldoRange'),
+        cuota: document.getElementById('cuota'),
+        cuotaRange: document.getElementById('cuotaRange'),
+        tae: document.getElementById('tae'),
+        taeRange: document.getElementById('taeRange'),
+        tiempo: document.getElementById('tiempo'),
+        tiempoRange: document.getElementById('tiempoRange'),
+        timeRadios: document.getElementsByName('timeUnit'),
+        tieneSeguro: document.getElementById('tieneSeguro'),
+        hayImpagos: document.getElementById('hayImpagos'),
+        calcBtn: document.getElementById('calcBtn'),
+        results: document.getElementById('results'),
+        totalRecuperar: document.getElementById('totalRecuperar'),
+        resIntereses: document.getElementById('resIntereses'),
+        resSeguro: document.getElementById('resSeguro'),
+        resImpagos: document.getElementById('resImpagos'),
+        lineaSeguro: document.getElementById('lineaSeguro'),
+        lineaImpagos: document.getElementById('lineaImpagos'),
+        
+        // Modal
+        ctaBtn: document.getElementById('ctaBtn'),
+        leadModal: document.getElementById('leadModal'),
+        modalClose: document.getElementById('modalClose'),
+        leadForm: document.getElementById('leadForm'),
+        formMessage: document.getElementById('formMessage'),
+        submitBtn: document.getElementById('submitBtn'),
+        
+        // Form hidden fields
+        form_deuda: document.getElementById('form_deuda'),
+        form_cuota: document.getElementById('form_cuota'),
+        form_tae: document.getElementById('form_tae'),
+        form_tiempo: document.getElementById('form_tiempo'),
+        form_recuperable: document.getElementById('form_recuperable'),
+        form_seguro: document.getElementById('form_seguro'),
+        form_impagos: document.getElementById('form_impagos')
+      };
+
+      const nfmt = new Intl.NumberFormat('es-ES', {
+        style:'currency', currency:'EUR', minimumFractionDigits:0, maximumFractionDigits:0
+      });
+
+      // ========================================
+      // SINCRONIZACIÓN INPUTS <-> SLIDERS
+      // ========================================
+      function sync(input, range) {
+        input.addEventListener('input', () => {
+          range.value = input.value;
+          updateRangeColor(range);
+        });
+        range.addEventListener('input', () => {
+          input.value = range.value;
+          updateRangeColor(range);
+        });
+        updateRangeColor(range);
+      }
+
+      function updateRangeColor(range) {
+        const val = (range.value - range.min) / (range.max - range.min) * 100;
+        range.style.background = `linear-gradient(to right, var(--primary) ${val}%, #e5e7eb ${val}%)`;
+      }
+
+      sync(els.saldo, els.saldoRange);
+      sync(els.cuota, els.cuotaRange);
+      sync(els.tae, els.taeRange);
+      sync(els.tiempo, els.tiempoRange);
+
+      // ========================================
+      // LÓGICA AÑOS VS MESES
+      // ========================================
+      let isYears = true;
+      
+      function handleTimeUnitChange(e) {
+        const val = parseFloat(els.tiempo.value) || 0;
+        
+        if (e.target.value === 'years') {
+          isYears = true;
+          const newYears = parseFloat((val / 12).toFixed(1));
+          els.tiempo.value = newYears;
+          els.tiempoRange.min = 0;
+          els.tiempoRange.max = 30;
+          els.tiempoRange.step = 0.5;
+          els.tiempoRange.value = newYears;
+        } else {
+          isYears = false;
+          const newMonths = Math.round(val * 12);
+          els.tiempo.value = newMonths;
+          els.tiempoRange.min = 0;
+          els.tiempoRange.max = 360;
+          els.tiempoRange.step = 1;
+          els.tiempoRange.value = newMonths;
+        }
+        updateRangeColor(els.tiempoRange);
+      }
+
+      Array.from(els.timeRadios).forEach(radio => {
+        radio.addEventListener('change', handleTimeUnitChange);
+      });
+
+      // ========================================
+      // LÓGICA DE CÁLCULO
+      // ========================================
+      let calculatedData = {};
+
+      function calcular() {
+        const saldo = parseFloat(els.saldo.value) || 0;
+        const cuota = parseFloat(els.cuota.value) || 0;
+        const tae = parseFloat(els.tae.value) || 0;
+        let tiempoInput = parseFloat(els.tiempo.value) || 0;
+        let mesesTotales = isYears ? (tiempoInput * 12) : tiempoInput;
+
+        if(mesesTotales < 1) mesesTotales = 1;
+
+        // Lógica correcta del archivo funcional:
+        // K depende del ratio, pero SOLO aplica K=65 cuando ratio está entre 2.2 y 2.8
+        const ratio = (cuota > 0 && mesesTotales > 0) ? (saldo / (cuota * mesesTotales)) : 0;
+        let K = 60;
+        if (ratio >= 2.2 && ratio <= 2.8) {
+          K = 65;
+        }
+
+        // Base recuperable
+        const recuperacionBase = cuota * mesesTotales * (tae / K);
+        
+        // Seguro: fórmula exacta 3/14 (aprox 21.4%)
+        const extraSeguro = els.tieneSeguro.checked ? (recuperacionBase * (3/14)) : 0;
+        
+        // Impagos: fijo 150€
+        const extraImpagos = els.hayImpagos.checked ? 150 : 0;
+        const total = recuperacionBase + extraSeguro + extraImpagos;
+
+        // Guardar datos calculados
+        calculatedData = {
+          saldo: saldo,
+          cuota: cuota,
+          tae: tae,
+          tiempo: mesesTotales,
+          recuperable: Math.round(total),
+          tiene_seguro: els.tieneSeguro.checked ? 1 : 0,
+          hay_impagos: els.hayImpagos.checked ? 1 : 0
+        };
+
+        // Renderizar
+        els.totalRecuperar.textContent = nfmt.format(total);
+        els.resIntereses.textContent = nfmt.format(recuperacionBase);
+        
+        if (els.tieneSeguro.checked) {
+          els.resSeguro.textContent = "+ " + nfmt.format(extraSeguro);
+          els.lineaSeguro.style.display = 'flex';
+        } else {
+          els.lineaSeguro.style.display = 'none';
+        }
+
+        if (els.hayImpagos.checked) {
+          els.resImpagos.textContent = "+ " + nfmt.format(extraImpagos);
+          els.lineaImpagos.style.display = 'flex';
+        } else {
+          els.lineaImpagos.style.display = 'none';
+        }
+
+        els.results.style.display = 'block';
+        els.results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      els.calcBtn.addEventListener('click', calcular);
+
+      // ========================================
+      // MODAL CONTROL
+      // ========================================
+      function openModal() {
+        // Rellenar campos ocultos con datos de la calculadora
+        els.form_deuda.value = calculatedData.saldo || '';
+        els.form_cuota.value = calculatedData.cuota || '';
+        els.form_tae.value = calculatedData.tae || '';
+        els.form_tiempo.value = calculatedData.tiempo || '';
+        els.form_recuperable.value = calculatedData.recuperable || '';
+        els.form_seguro.value = calculatedData.tiene_seguro || 0;
+        els.form_impagos.value = calculatedData.hay_impagos || 0;
+        
+        els.leadModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        els.leadModal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      els.ctaBtn.addEventListener('click', openModal);
+      els.modalClose.addEventListener('click', closeModal);
+      
+      // Cerrar al hacer clic fuera del modal
+      els.leadModal.addEventListener('click', (e) => {
+        if (e.target === els.leadModal) {
+          closeModal();
+        }
+      });
+
+      // ========================================
+      // ENVÍO DEL FORMULARIO
+      // ========================================
+      els.leadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Mostrar loading
+        els.submitBtn.disabled = true;
+        els.submitBtn.textContent = 'Enviando...';
+        hideMessage();
+
+        const formData = new FormData(els.leadForm);
+
+        try {
+          const response = await fetch('guardar_lead.php', {
+            method: 'POST',
+            body: formData
+          });
+
+          // Verificar si la respuesta es válida
+          if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+          }
+
+          const result = await response.json();
+
+          if (result.success) {
+            showMessage('¡Solicitud enviada con éxito! Te contactaremos pronto.', 'success');
+            els.leadForm.reset();
+            
+            // Cerrar modal después de 2 segundos
+            setTimeout(() => {
+              closeModal();
+              hideMessage();
+            }, 2000);
+          } else {
+            showMessage(result.message || 'Error al enviar el formulario. Inténtalo de nuevo.', 'error');
+          }
+        } catch (error) {
+          console.error('Error completo:', error);
+          showMessage('Error de conexión: ' + error.message, 'error');
+        } finally {
+          els.submitBtn.disabled = false;
+          els.submitBtn.textContent = 'Enviar';
+        }
+      });
+
+      function showMessage(text, type) {
+        els.formMessage.textContent = text;
+        els.formMessage.className = 'form-message ' + type;
+        els.formMessage.style.display = 'block';
+      }
+
+      function hideMessage() {
+        els.formMessage.style.display = 'none';
+      }
+
+    })();
+  </script>
+</body>
+</html>
