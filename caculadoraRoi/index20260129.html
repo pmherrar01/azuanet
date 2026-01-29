@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculadora ROI Marketing - ¿Es rentable mi campaña de publicidad? | Azuanet</title>
+    <meta name="description" content="Calcula gratis si tu campaña de marketing será rentable. Descubre cuánto invertir en publicidad online y cuál será tu beneficio. Herramienta gratuita.">
+    <meta name="keywords" content="calculadora ROI, rentabilidad publicidad, calcular beneficio campaña, Google Ads rentable, Facebook Ads ROI, inversión marketing, retorno inversión publicidad">
+    <meta name="author" content="Azuanet Soluciones Web">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://calculadoraroi.azuanet.es/">
+    <meta property="og:title" content="Calculadora ROI Marketing - ¿Es rentable mi campaña?">
+    <meta property="og:description" content="Descubre si tu inversión en publicidad será rentable antes de gastar un euro.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://calculadoraroi.azuanet.es/">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        
+        /* Evita zoom en inputs en iPhone */
+        input, textarea, select { font-size: 16px !important; }
+        
+        /* Estilos de foco y scroll */
+        .input-container:focus-within label { color: #4f46e5; }
+        .input-container:focus-within input, .input-container:focus-within select { border-color: #4f46e5; ring: 2px solid #e0e7ff; background-color: #fff; }
+        .help-text { font-size: 0.75rem; line-height: 1.25rem; color: #6b7280; margin-top: 0.35rem; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c7c7c7; border-radius: 10px; }
+
+        /* --- Sticky solo en escritorio --- */
+        @media (min-width: 1024px) {
+            .sticky-results { position: sticky; top: 100px; }
+        }
+
+        /* --- ANIMACIONES DEL BOTÓN --- */
+        @keyframes heartbeat {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+        @keyframes shine-move {
+            0% { left: -100%; opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { left: 100%; opacity: 0; }
+        }
+        .btn-attention {
+            animation: heartbeat 2.5s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-attention::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-20deg);
+            animation: shine-move 3s infinite 1s;
+        }
+
+        /* Estilos para sección avanzada */
+        .advanced-section {
+            transition: all 0.3s ease;
+        }
+        .advanced-section.collapsed {
+            opacity: 0.7;
+        }
+        .advanced-toggle {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .advanced-toggle:hover {
+            background-color: #f3f4f6;
+        }
+        .chevron-icon {
+            transition: transform 0.3s ease;
+        }
+        .advanced-section.expanded .chevron-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+    <script>
+    (function() {
+        var res = window.screen.width + "x" + window.screen.height;
+        document.cookie = "device_res=" + res + "; path=/; max-age=3600";
+    })();
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <nav class="bg-white border-b border-gray-200 py-3 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
+            <a href="https://www.azuanet.es" target="_blank" rel="noopener">
+                <img src="https://calculadoraroi.azuanet.es/css/logoazuanet_200x100.png" alt="Azuanet Soluciones Web" class="h-10 md:h-12">
+            </a>
+            <a href="https://briefings.azuanetmarketing.com/?quill_forms=soluciones-para-tu-empresa&procedencia=calculadoraroi" target="_blank" rel="noopener" class="text-sm text-indigo-600 font-semibold hover:text-indigo-800 transition-colors">
+                Contactar
+            </a>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto py-8 px-4">
+        
+        <div class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
+                ¿Será rentable tu campaña de publicidad?
+            </h1>
+            <p class="text-gray-500 max-w-xl mx-auto text-sm md:text-base">
+                Calcula gratis cuánto necesitas invertir y qué beneficio obtendrás. Sin rodeos, números claros.
+            </p>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+            
+            <div class="lg:col-span-7 space-y-6 order-1">
+                <form id="calcForm" onsubmit="return false;" class="space-y-6">
+                    
+                    <!-- BLOQUE 1: Economía del Producto -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                        <div class="flex items-center gap-3 mb-5 border-b border-gray-100 pb-3">
+                            <span class="bg-emerald-100 text-emerald-700 w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm">1</span>
+                            <h2 class="font-bold text-gray-800">Precio de Venta de tu Producto o Servicio</h2>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="input-container">
+                                <label class="block text-sm font-bold text-gray-800 mb-1">Precio de Venta (PVP)</label>
+                                <div class="relative">
+                                    <span class="absolute left-4 top-3.5 text-gray-400 font-bold">€</span>
+                                    <input type="number" id="price" step="any" class="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl outline-none transition-all font-medium" placeholder="Ej. 50">
+                                </div>
+                                <p class="help-text">💰 ¿Cuánto cobras por tu producto o servicio?</p>
+                            </div>
+
+                            <div class="input-container">
+                                <label class="block text-sm font-bold text-gray-800 mb-1">Margen de Beneficio (%)</label>
+                                <div class="relative">
+                                    <input type="number" id="margin" step="0.1" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl outline-none transition-all font-medium pr-10" placeholder="Ej. 40" value="40">
+                                    <span class="absolute right-4 top-3.5 text-gray-400 font-bold">%</span>
+                                </div>
+                                <p class="help-text">📊 % de beneficio que sacas a cada venta. <span class="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-600">Típico: 30% - 60%</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 2: Objetivo de Facturación -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                        <div class="flex items-center gap-3 mb-5 border-b border-gray-100 pb-3">
+                            <span class="bg-blue-100 text-blue-700 w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm">2</span>
+                            <h2 class="font-bold text-gray-800">Objetivo de Ventas</h2>
+                        </div>
+
+                        <div class="input-container">
+                            <label class="block text-sm font-bold text-gray-800 mb-1">¿Cuánto te gustaría facturar al mes en ventas?</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3.5 text-gray-400 font-bold">€</span>
+                                <input type="number" id="targetRevenue" step="any" class="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl outline-none transition-all font-medium" placeholder="Ej. 5000">
+                            </div>
+                            <p class="help-text">🎯 Ingreso mensual objetivo por ventas publicitarias.</p>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 3: Configuración Avanzada -->
+                    <div id="advancedSection" class="advanced-section bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden collapsed">
+                        <div class="advanced-toggle flex items-center justify-between p-5 border-b border-gray-100" onclick="toggleAdvanced()">
+                            <div class="flex items-center gap-3">
+                                <span class="bg-gray-100 text-gray-600 w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm">3</span>
+                                <div>
+                                    <h2 class="font-bold text-gray-800">Configuración Avanzada</h2>
+                                    <p class="text-xs text-gray-500 mt-0.5">Datos de mercado pre-configurados · Personaliza si lo necesitas</p>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 chevron-icon"></i>
+                        </div>
+
+                        <div id="advancedContent" class="p-6 hidden">
+                            <!-- Selector de tipo de negocio -->
+                            <div class="input-container mb-6">
+                                <label class="block text-sm font-bold text-gray-800 mb-1">Tipo de Negocio</label>
+                                <select id="businessType" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl outline-none transition-all font-medium cursor-pointer" onchange="applyBusinessDefaults()">
+                                    <option value="general">🌐 General / Por defecto</option>
+                                    <option value="ecommerce">🛒 E-commerce General</option>
+                                    <option value="food">🍕 Alimentación y Bebidas</option>
+                                    <option value="beauty">💄 Belleza y Cosmética</option>
+                                    <option value="fashion">👗 Moda y Ropa</option>
+                                    <option value="tech">💻 Tecnología / Electrónica</option>
+                                    <option value="home">🏠 Hogar y Decoración</option>
+                                    <option value="health">💪 Salud y Fitness</option>
+                                    <option value="services">💼 Servicios Profesionales</option>
+                                    <option value="legal">⚖️ Legal / Abogados</option>
+                                    <option value="b2b">🏢 B2B / Empresas</option>
+                                    <option value="pets">🐾 Mascotas</option>
+                                    <option value="travel">✈️ Viajes y Turismo</option>
+                                    <option value="luxury">💎 Artículos de Lujo</option>
+                                </select>
+                                <p class="help-text">📈 Selecciona tu sector para aplicar datos medios del mercado automáticamente.</p>
+                            </div>
+
+                            <div class="grid md:grid-cols-3 gap-6">
+                                <div class="input-container">
+                                    <label class="block text-sm font-bold text-gray-800 mb-1">Presupuesto Total (€)</label>
+                                    <div class="relative">
+                                        <span class="absolute left-4 top-3.5 text-gray-400 font-bold">€</span>
+                                        <input type="number" id="investment" step="any" class="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl outline-none transition-all font-medium" placeholder="Auto">
+                                    </div>
+                                    <p class="help-text">💵 Se calcula automáticamente según tu objetivo.</p>
+                                </div>
+
+                                <div class="input-container">
+                                    <label class="block text-sm font-bold text-gray-800 mb-1">Coste por Clic (CPC)</label>
+                                    <div class="relative">
+                                        <span class="absolute left-4 top-3.5 text-gray-400 font-bold">€</span>
+                                        <input type="number" id="cpc" step="0.01" class="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl outline-none transition-all font-medium" placeholder="0.50" value="0.50">
+                                    </div>
+                                    <p class="help-text">👆 Coste medio por visita en tu sector.</p>
+                                </div>
+
+                                <div class="input-container">
+                                    <label class="block text-sm font-bold text-gray-800 mb-1">Tasa de Conversión (%)</label>
+                                    <div class="relative">
+                                        <input type="number" id="conversion" step="0.1" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl outline-none transition-all font-medium pr-10" placeholder="2.5" value="2.5">
+                                        <span class="absolute right-4 top-3.5 text-gray-400 font-bold">%</span>
+                                    </div>
+                                    <p class="help-text">🛍️ % de visitas que compran.</p>
+                                </div>
+                            </div>
+
+                            <!-- Coste de Gestión -->
+                            <div class="input-container mt-6">
+                                <label class="block text-sm font-bold text-gray-800 mb-1">Coste de Gestión Mensual (opcional)</label>
+                                <div class="relative max-w-xs">
+                                    <span class="absolute left-4 top-3.5 text-gray-400 font-bold">€</span>
+                                    <input type="number" id="managementFee" step="any" class="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl outline-none transition-all font-medium" placeholder="Ej. 200" value="0">
+                                </div>
+                                <p class="help-text">💼 Honorarios de agencia o gestión de campaña al mes. <span class="text-xs bg-amber-100 px-2 py-0.5 rounded text-amber-700">Se suma a la inversión total</span></p>
+                            </div>
+
+                            <!-- SECCIÓN DE REALISMO - TRÁFICO FRÍO -->
+                            <div class="mt-8 p-5 bg-red-50 rounded-xl border border-red-200">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600"></i>
+                                    <h3 class="font-bold text-red-800">⚠️ Factores de Realismo (Tráfico Frío)</h3>
+                                </div>
+                                <p class="text-xs text-red-700 mb-4">
+                                    <strong>IMPORTANTE:</strong> La publicidad online atrae principalmente <strong>tráfico frío</strong> (personas que NO te conocen y NO están listas para comprar). 
+                                    Los benchmarks de conversión asumen tráfico caliente. En campañas reales, el rendimiento es MUCHO menor.
+                                </p>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="input-container">
+                                        <label class="block text-sm font-bold text-gray-800 mb-1">Calidad del Tráfico (%)</label>
+                                        <div class="relative">
+                                            <input type="number" id="trafficQuality" step="1" min="5" max="100" class="w-full px-4 py-3 bg-white border border-red-300 rounded-xl outline-none transition-all font-medium pr-10" placeholder="25" value="25">
+                                            <span class="absolute right-4 top-3.5 text-gray-400 font-bold">%</span>
+                                        </div>
+                                        <p class="help-text">🎯 % de visitas realmente interesadas. <span class="text-xs bg-red-100 px-2 py-0.5 rounded text-red-700">Tráfico frío = 15-30%</span></p>
+                                    </div>
+
+                                    <div class="input-container">
+                                        <label class="block text-sm font-bold text-gray-800 mb-1">Clics Desperdiciados (%)</label>
+                                        <div class="relative">
+                                            <input type="number" id="wastedClicks" step="1" min="0" max="60" class="w-full px-4 py-3 bg-white border border-red-300 rounded-xl outline-none transition-all font-medium pr-10" placeholder="25" value="25">
+                                            <span class="absolute right-4 top-3.5 text-gray-400 font-bold">%</span>
+                                        </div>
+                                        <p class="help-text">🚫 Bots, curiosos, clics accidentales. <span class="text-xs bg-red-100 px-2 py-0.5 rounded text-red-700">Normal = 20-35%</span></p>
+                                    </div>
+                                </div>
+
+                                <div class="grid md:grid-cols-2 gap-6 mt-4">
+                                    <div class="input-container">
+                                        <label class="block text-sm font-bold text-gray-800 mb-1">Tasa de Rebote Web (%)</label>
+                                        <div class="relative">
+                                            <input type="number" id="bounceRate" step="1" min="0" max="90" class="w-full px-4 py-3 bg-white border border-red-300 rounded-xl outline-none transition-all font-medium pr-10" placeholder="60" value="60">
+                                            <span class="absolute right-4 top-3.5 text-gray-400 font-bold">%</span>
+                                        </div>
+                                        <p class="help-text">↩️ Visitas que se van sin interactuar. <span class="text-xs bg-red-100 px-2 py-0.5 rounded text-red-700">Tráfico frío = 50-70%</span></p>
+                                    </div>
+
+                                    <div class="input-container">
+                                        <label class="block text-sm font-bold text-gray-800 mb-1">Factor Competencia</label>
+                                        <div class="relative">
+                                            <select id="competitionFactor" class="w-full px-4 py-3 bg-white border border-red-300 rounded-xl outline-none transition-all font-medium cursor-pointer">
+                                                <option value="1.0">🟢 Baja (CPC estable)</option>
+                                                <option value="1.3" selected>🟡 Media (+30% CPC real)</option>
+                                                <option value="1.6">🟠 Alta (+60% CPC real)</option>
+                                                <option value="2.0">🔴 Muy alta (x2 CPC real)</option>
+                                            </select>
+                                        </div>
+                                        <p class="help-text">📈 El CPC sube con la competencia real.</p>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 p-3 bg-white rounded-lg border border-red-200">
+                                    <div class="flex items-start gap-2">
+                                        <i data-lucide="calculator" class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"></i>
+                                        <p class="text-xs text-red-800">
+                                            <strong>Cálculo real:</strong> Con 25% de tráfico cualificado, 25% de clics perdidos, 60% de rebote y competencia media, 
+                                            necesitarás <strong>~10x más inversión</strong> que los cálculos teóricos optimistas. Así funciona la publicidad de verdad.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Indicador de datos del mercado -->
+                            <div id="marketDataInfo" class="mt-4 p-3 bg-indigo-50 rounded-lg border border-indigo-100">
+                                <div class="flex items-start gap-2">
+                                    <i data-lucide="info" class="w-4 h-4 text-indigo-600 mt-0.5 flex-shrink-0"></i>
+                                    <p class="text-xs text-indigo-700">
+                                        <strong>Datos del mercado 2025:</strong> <span id="marketDataText">CPC medio €0.50 y conversión del 2.5% para negocios generales según benchmarks de Google Ads.</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Panel de Resultados -->
+            <div class="lg:col-span-5 lg:order-2 order-2">
+                <div class="sticky-results">
+                    <div class="bg-gray-900 text-white p-6 rounded-2xl shadow-xl ring-1 ring-gray-800 relative overflow-hidden">
+                        
+                        <div class="flex items-center gap-2 mb-6 relative z-10">
+                            <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                            <h3 class="font-bold text-lg">Resultados Estimados</h3>
+                        </div>
+
+                        <div class="space-y-5 relative z-10">
+                            
+                            <!-- Inversión Total (Publicidad + Gestión) -->
+                            <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                                <p class="text-gray-300 text-xs font-bold uppercase tracking-widest mb-1">Inversión Total Necesaria</p>
+                                <div class="text-3xl font-extrabold text-white tracking-tight truncate" id="prev_total_investment">€0,00</div>
+                                <div class="flex justify-between text-xs text-gray-400 mt-2 pt-2 border-t border-white/10">
+                                    <span>Publicidad: <strong id="prev_investment_only">€0</strong></span>
+                                    <span>Gestión: <strong id="prev_management_fee">€0</strong></span>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-end border-b border-gray-700 pb-3">
+                                <div>
+                                    <p class="text-gray-400 text-xs uppercase font-bold tracking-wider">Visitas Necesarias</p>
+                                    <p class="text-[10px] text-gray-500 mt-0.5">Inversión / CPC</p>
+                                </div>
+                                <span class="text-xl font-bold" id="prev_visitors">-</span>
+                            </div>
+
+                            <div class="flex justify-between items-end border-b border-gray-700 pb-3">
+                                <div>
+                                    <p class="text-gray-400 text-xs uppercase font-bold tracking-wider">Ventas Esperadas</p>
+                                    <p class="text-[10px] text-gray-500 mt-0.5">Con tu tasa de conversión</p>
+                                </div>
+                                <span class="text-xl font-bold" id="prev_sales">-</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-end border-b border-gray-700 pb-3">
+                                <div>
+                                    <p class="text-gray-400 text-xs uppercase font-bold tracking-wider">Beneficio por Venta</p>
+                                </div>
+                                <span class="text-xl font-bold text-white" id="prev_margin">€0,00</span>
+                            </div>
+
+                            <!-- Beneficio Neto -->
+                            <div class="bg-white/10 p-4 rounded-xl mt-2 border border-white/10">
+                                <p class="text-gray-300 text-xs font-bold uppercase tracking-widest mb-1">Beneficio Neto Estimado</p>
+                                <div class="text-4xl font-extrabold text-emerald-400 tracking-tight truncate" id="prev_profit">€0,00</div>
+                                <div class="flex items-center gap-2 mt-2">
+                                    <span class="text-sm text-gray-400">ROI Estimado:</span>
+                                    <span class="text-sm font-bold text-white" id="prev_roi">0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 relative z-20">
+                            <button onclick="openModal()" class="btn-attention w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-[length:200%_auto] hover:bg-right transition-all duration-500 text-white font-extrabold text-lg py-4 px-6 rounded-xl shadow-2xl flex justify-center items-center gap-3 group border border-white/20">
+                                <div class="bg-white/20 p-1.5 rounded-lg group-hover:scale-110 transition-transform">
+                                    <i data-lucide="file-check" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <span class="tracking-wide text-shadow">VER INFORME COMPLETO</span>
+                                <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                            <p class="text-center text-[10px] text-indigo-200 mt-3 uppercase tracking-widest font-semibold opacity-80">
+                                👆 Descarga Gratuita · Incluye Estrategia
+                            </p>
+                        </div>
+                        
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-600 rounded-full mix-blend-multiply filter blur-[80px] opacity-20 pointer-events-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de captura de leads -->
+    <div id="leadModal" class="fixed inset-0 bg-gray-900/90 backdrop-blur-sm hidden items-end sm:items-center justify-center z-50 p-0 sm:p-4 transition-opacity duration-300">
+        <div class="bg-white w-full sm:w-[550px] rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh]" id="modalContent">
+            
+            <div class="bg-indigo-50 p-6 sm:p-8 border-b border-indigo-100">
+                <div class="flex items-start gap-4">
+                    <div class="hidden sm:flex bg-indigo-600 p-3 rounded-lg text-white shadow-lg shadow-indigo-200">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Guarda tu Análisis</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            Recibirás el PDF con la <strong>estrategia detallada</strong>, diferentes escenarios de inversión y benchmarks de tu sector.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <form action="process_lead.php" method="POST" class="p-6 sm:p-8 overflow-y-auto custom-scrollbar bg-white">
+                <input type="hidden" name="investment" id="h_inv">
+                <input type="hidden" name="cpc" id="h_cpc">
+                <input type="hidden" name="conversion" id="h_conv">
+                <input type="hidden" name="price" id="h_price">
+                <input type="hidden" name="margin" id="h_margin">
+                <input type="hidden" name="targetRevenue" id="h_target">
+                <input type="hidden" name="businessType" id="h_businessType">
+                <input type="hidden" name="managementFee" id="h_managementFee">
+                <input type="hidden" name="trafficQuality" id="h_trafficQuality">
+                <input type="hidden" name="wastedClicks" id="h_wastedClicks">
+                <input type="hidden" name="bounceRate" id="h_bounceRate">
+                <input type="hidden" name="competitionFactor" id="h_competitionFactor">
+
+                <div class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">Tu Nombre</label>
+                            <input type="text" name="leadName" required class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-indigo-500 outline-none transition-all font-medium">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">Teléfono (Opcional)</label>
+                            <input type="tel" name="leadPhone" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-indigo-500 outline-none transition-all font-medium">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-indigo-600 uppercase mb-1.5 ml-1">Email donde enviar el PDF *</label>
+                        <div class="relative">
+                            <i data-lucide="mail" class="absolute left-4 top-3.5 w-5 h-5 text-gray-400"></i>
+                            <input type="email" name="leadEmail" required placeholder="tu@email.com" class="w-full pl-11 pr-4 py-3.5 bg-white border-2 border-indigo-100 rounded-xl focus:border-indigo-500 outline-none transition-all font-medium text-gray-800">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">Nombre Producto/Servicio</label>
+                        <input type="text" name="prodName" required class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-indigo-500 outline-none transition-all font-medium">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">Breve descripción</label>
+                        <textarea name="prodDesc" rows="2" placeholder="¿Qué problema resuelves?" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-indigo-500 outline-none transition-all font-medium"></textarea>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100 space-y-3">
+                        <label class="flex items-start gap-3 cursor-pointer group">
+                            <div class="relative flex items-center mt-0.5">
+                                <input type="checkbox" name="newsletterOptIn" value="1" class="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-gray-300 transition-all checked:border-indigo-600 checked:bg-indigo-600">
+                                <i data-lucide="check" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none"></i>
+                            </div>
+                            <span class="text-xs text-gray-600 leading-snug group-hover:text-gray-800">
+                                <strong>Mejorar mis ventas:</strong> Deseo recibir consejos de optimización empresarial y estrategias.
+                            </span>
+                        </label>
+                        <label class="flex items-start gap-3 cursor-pointer group">
+                             <div class="relative flex items-center mt-0.5">
+                                <input type="checkbox" name="privacyAccepted" required value="1" class="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-gray-300 transition-all checked:border-gray-800 checked:bg-gray-800">
+                                <i data-lucide="check" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none"></i>
+                            </div>
+                            <span class="text-xs text-gray-500 leading-snug">
+                                He leído y acepto la <a href="#" class="underline text-indigo-600">Política de Privacidad</a>. *
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mt-6 space-y-3">
+                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-bold text-lg py-4 rounded-xl shadow-xl shadow-indigo-200 transition-all transform hover:scale-[1.01] flex justify-center items-center gap-2">
+                        <i data-lucide="file-check" class="w-5 h-5"></i>
+                        QUIERO MI INFORME AHORA
+                    </button>
+                    <button type="button" onclick="closeModal()" class="w-full text-xs text-gray-400 hover:text-gray-600 font-medium py-2">
+                        No gracias, cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        // Valores por defecto globales (se usan cuando los campos están vacíos)
+        const DEFAULT_CPC = 0.50;
+        const DEFAULT_CONVERSION = 2.5;
+        const DEFAULT_MARGIN = 40;
+        
+        // Datos del mercado por tipo de negocio (basados en benchmarks 2025)
+        const businessDefaults = {
+            general:    { cpc: 0.50, conversion: 2.5, text: "CPC medio €0.50 y conversión del 2.5% para negocios generales según benchmarks de Google Ads 2025." },
+            ecommerce:  { cpc: 0.65, conversion: 2.8, text: "CPC medio €0.65 y conversión del 2.8% para e-commerce general según WordStream y Dynamic Yield 2025." },
+            food:       { cpc: 0.45, conversion: 6.0, text: "CPC medio €0.45 y conversión del 6.0% para alimentación/bebidas - uno de los sectores con mejor conversión." },
+            beauty:     { cpc: 0.80, conversion: 4.5, text: "CPC medio €0.80 y conversión del 4.5% para belleza/cosmética según benchmarks de Dynamic Yield 2025." },
+            fashion:    { cpc: 0.70, conversion: 3.0, text: "CPC medio €0.70 y conversión del 3.0% para moda/ropa según estudios de IRP Commerce 2025." },
+            tech:       { cpc: 0.90, conversion: 2.0, text: "CPC medio €0.90 y conversión del 2.0% para tecnología - sector con ciclos de compra más largos." },
+            home:       { cpc: 0.75, conversion: 2.5, text: "CPC medio €0.75 y conversión del 2.5% para hogar/decoración según benchmarks de e-commerce 2025." },
+            health:     { cpc: 1.00, conversion: 3.5, text: "CPC medio €1.00 y conversión del 3.5% para salud/fitness según Google Ads Benchmarks 2025." },
+            services:   { cpc: 1.50, conversion: 5.0, text: "CPC medio €1.50 y conversión del 5.0% para servicios profesionales - mayor intención de compra." },
+            legal:      { cpc: 3.00, conversion: 5.0, text: "CPC medio €3.00 (sector más caro) y conversión del 5.0% para legal/abogados según WordStream 2025." },
+            b2b:        { cpc: 1.20, conversion: 3.0, text: "CPC medio €1.20 y conversión del 3.0% para B2B según estudios de Google Ads Business 2025." },
+            pets:       { cpc: 0.60, conversion: 3.0, text: "CPC medio €0.60 y conversión del 3.0% para mascotas según ConvertCart Benchmarks 2025." },
+            travel:     { cpc: 0.55, conversion: 1.5, text: "CPC medio €0.55 y conversión del 1.5% para viajes - sector con alta consideración previa." },
+            luxury:     { cpc: 1.50, conversion: 1.0, text: "CPC medio €1.50 y conversión del 1.0% para lujo - ciclos de compra extensos según ECDB 2025." }
+        };
+
+        const formatCurrency = (n) => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2 }).format(n);
+
+        // Función para obtener valor numérico de un input con fallback
+        function getInputValue(id, defaultValue) {
+            const el = document.getElementById(id);
+            if (!el) return defaultValue;
+            const val = parseFloat(el.value);
+            return isNaN(val) || val === 0 ? defaultValue : val;
+        }
+
+        // Aplicar valores por defecto según tipo de negocio
+        function applyBusinessDefaults() {
+            const type = document.getElementById('businessType').value;
+            const defaults = businessDefaults[type];
+            
+            document.getElementById('cpc').value = defaults.cpc;
+            document.getElementById('conversion').value = defaults.conversion;
+            document.getElementById('marketDataText').innerText = defaults.text;
+            
+            calculate();
+        }
+
+        // Toggle sección avanzada
+        function toggleAdvanced() {
+            const section = document.getElementById('advancedSection');
+            const content = document.getElementById('advancedContent');
+            
+            if (section.classList.contains('collapsed')) {
+                section.classList.remove('collapsed');
+                section.classList.add('expanded');
+                content.classList.remove('hidden');
+            } else {
+                section.classList.add('collapsed');
+                section.classList.remove('expanded');
+                content.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        function calculate() {
+            // Obtener valores con fallbacks por defecto
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const marginPercent = getInputValue('margin', DEFAULT_MARGIN);
+            const targetRevenue = parseFloat(document.getElementById('targetRevenue').value) || 0;
+            const managementFee = parseFloat(document.getElementById('managementFee').value) || 0;
+            const cpc = getInputValue('cpc', DEFAULT_CPC);
+            const conv = getInputValue('conversion', DEFAULT_CONVERSION);
+            
+            // FACTORES DE TRÁFICO FRÍO (Realismo)
+            const trafficQuality = getInputValue('trafficQuality', 25); // % de tráfico cualificado (por defecto 25% = muy frío)
+            const wastedClicks = getInputValue('wastedClicks', 25); // % de clics desperdiciados
+            const bounceRate = getInputValue('bounceRate', 60); // % de rebote web
+            const competitionFactor = parseFloat(document.getElementById('competitionFactor')?.value) || 1.3; // Factor competencia
+
+            // Calcular margen por unidad (beneficio en € por cada venta)
+            const marginPerUnit = price * (marginPercent / 100);
+
+            // Calcular ventas necesarias para alcanzar el objetivo de facturación
+            const salesNeeded = price > 0 ? targetRevenue / price : 0;
+
+            // ====== CÁLCULOS AJUSTADOS POR TRÁFICO FRÍO (MUY PESIMISTAS) ======
+            
+            // 1. CPC REAL = CPC base × factor competencia × (1 / (1 - clics desperdiciados))
+            // Ej: CPC 0.50 × 1.3 competencia × (1/0.75 por 25% desperdicio) = 0.87€
+            const cpcReal = cpc * competitionFactor * (1 / (1 - wastedClicks / 100));
+            
+            // 2. Conversión EFECTIVA = conversión teórica × calidad tráfico × (1 - rebote)
+            // Ej: 2.5% × 0.25 (calidad) × 0.40 (no rebota) = 0.25% conversión real
+            const convEffective = conv * (trafficQuality / 100) * (1 - bounceRate / 100);
+
+            // 3. Calcular visitas necesarias con la CONVERSIÓN EFECTIVA
+            const visitorsNeeded = convEffective > 0 ? (salesNeeded / convEffective) * 100 : 0;
+
+            // 4. Calcular inversión en publicidad necesaria con CPC REAL
+            const investmentAds = visitorsNeeded * cpcReal;
+
+            // Inversión total = publicidad + gestión
+            const totalInvestment = investmentAds + managementFee;
+
+            // Actualizar campo de inversión en el bloque avanzado
+            document.getElementById('investment').value = investmentAds > 0 ? investmentAds.toFixed(2) : '';
+
+            // Calcular beneficio bruto (ventas * margen por unidad)
+            const grossProfit = salesNeeded * marginPerUnit;
+            
+            // Calcular beneficio neto (beneficio bruto - inversión total incluyendo gestión)
+            const netProfit = grossProfit - totalInvestment;
+
+            // Calcular ROI sobre la inversión total
+            const roi = totalInvestment > 0 ? (netProfit / totalInvestment) * 100 : 0;
+
+            // ====== ACTUALIZAR INTERFAZ DE RESULTADOS ======
+            
+            // Inversión total
+            document.getElementById('prev_total_investment').innerText = totalInvestment > 0 ? formatCurrency(totalInvestment) : '€0,00';
+            document.getElementById('prev_investment_only').innerText = formatCurrency(investmentAds);
+            document.getElementById('prev_management_fee').innerText = formatCurrency(managementFee);
+            
+            // Visitas necesarias
+            document.getElementById('prev_visitors').innerText = visitorsNeeded > 0 ? Math.ceil(visitorsNeeded).toLocaleString('es-ES') : '-';
+            
+            // Ventas esperadas
+            document.getElementById('prev_sales').innerText = salesNeeded > 0 ? Math.ceil(salesNeeded).toLocaleString('es-ES') : '-';
+            
+            // Beneficio por venta (margen)
+            document.getElementById('prev_margin').innerText = marginPerUnit > 0 ? formatCurrency(marginPerUnit) : '€0,00';
+            
+            const profitEl = document.getElementById('prev_profit');
+            const roiEl = document.getElementById('prev_roi');
+
+            // Mostrar beneficio neto y ROI solo si hay datos suficientes
+            if (targetRevenue > 0 && price > 0) {
+                profitEl.innerText = formatCurrency(netProfit);
+                profitEl.className = `text-4xl font-extrabold tracking-tight truncate ${netProfit > 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+                roiEl.innerText = `${roi > 0 ? '+' : ''}${roi.toFixed(1).replace('.', ',')}%`;
+                roiEl.className = `text-sm font-bold ${roi > 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+            } else {
+                profitEl.innerText = "€0,00";
+                profitEl.className = "text-4xl font-extrabold text-gray-500 tracking-tight truncate";
+                roiEl.innerText = "0%";
+                roiEl.className = "text-sm font-bold text-gray-500";
+            }
+        }
+
+        // Event listeners para todos los inputs del formulario
+        const inputs = document.querySelectorAll('#calcForm input[type="number"], #calcForm select');
+        inputs.forEach(input => {
+            input.addEventListener('input', calculate);
+            input.addEventListener('change', calculate);
+        });
+
+        const modal = document.getElementById('leadModal');
+        const modalContent = document.getElementById('modalContent');
+
+        function openModal() {
+            const price = document.getElementById('price').value;
+            const targetRevenue = document.getElementById('targetRevenue').value;
+            
+            if (!price || !targetRevenue) {
+                alert("Por favor completa primero el Precio de Venta y tu Objetivo de Facturación.");
+                return;
+            }
+            
+            document.getElementById('h_inv').value = document.getElementById('investment').value;
+            document.getElementById('h_cpc').value = document.getElementById('cpc').value || DEFAULT_CPC;
+            document.getElementById('h_conv').value = document.getElementById('conversion').value || DEFAULT_CONVERSION;
+            document.getElementById('h_price').value = document.getElementById('price').value;
+            document.getElementById('h_margin').value = document.getElementById('margin').value || DEFAULT_MARGIN;
+            document.getElementById('h_target').value = document.getElementById('targetRevenue').value;
+            document.getElementById('h_businessType').value = document.getElementById('businessType').value;
+            document.getElementById('h_managementFee').value = document.getElementById('managementFee').value || 0;
+            document.getElementById('h_trafficQuality').value = document.getElementById('trafficQuality').value || 25;
+            document.getElementById('h_wastedClicks').value = document.getElementById('wastedClicks').value || 25;
+            document.getElementById('h_bounceRate').value = document.getElementById('bounceRate').value || 60;
+            document.getElementById('h_competitionFactor').value = document.getElementById('competitionFactor').value || 1.3;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => { modalContent.classList.remove('translate-y-full', 'opacity-0'); }, 10);
+        }
+
+        function closeModal() {
+            modalContent.classList.add('translate-y-full', 'opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+        }
+
+        // Inicializar: establecer valores por defecto y ejecutar cálculo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Asegurarse de que los campos tengan valores por defecto
+            if (!document.getElementById('margin').value) {
+                document.getElementById('margin').value = DEFAULT_MARGIN;
+            }
+            if (!document.getElementById('cpc').value) {
+                document.getElementById('cpc').value = DEFAULT_CPC;
+            }
+            if (!document.getElementById('conversion').value) {
+                document.getElementById('conversion').value = DEFAULT_CONVERSION;
+            }
+            
+            // Ejecutar cálculo inicial
+            calculate();
+        });
+        
+        // También ejecutar al cargar (respaldo)
+        calculate();
+    </script>
+
+    <!-- ========== CONTENIDO SEO VISUAL ========== -->
+    
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 py-16 mt-16">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">
+                ¿Tu publicidad online te da dinero o te lo quita?
+            </h2>
+            <p class="text-indigo-200 text-lg max-w-2xl mx-auto mb-8">
+                El 68% de los negocios que invierten en Google Ads o Facebook Ads pierden dinero. 
+                No porque la publicidad no funcione, sino porque <strong class="text-white">no hicieron los números antes</strong>.
+            </p>
+            <a href="#calcForm" class="inline-flex items-center gap-2 bg-white text-indigo-700 px-8 py-4 rounded-xl font-bold hover:bg-indigo-50 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                <i data-lucide="calculator" class="w-5 h-5"></i>
+                Calcular mi rentabilidad GRATIS
+            </a>
+        </div>
+    </section>
+
+    <!-- 3 Columnas: Problema - Solución - Resultado -->
+    <section class="py-16 bg-white">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">
+                        ⚠️
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-2">El problema</h3>
+                    <p class="text-gray-600 text-sm">
+                        Lanzas una campaña sin saber cuánto te cuesta cada cliente. 
+                        Gastas 500€ y consigues 3 ventas. ¿Has ganado o perdido?
+                    </p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">
+                        🧮
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-2">La solución</h3>
+                    <p class="text-gray-600 text-sm">
+                        Calcula ANTES de invertir. Con 3 datos básicos de tu negocio, 
+                        sabes exactamente si la campaña será rentable o no.
+                    </p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">
+                        📈
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-2">El resultado</h3>
+                    <p class="text-gray-600 text-sm">
+                        Inviertes con seguridad. Sabes que por cada euro que pones, 
+                        te vuelven X euros. Escalas lo que funciona.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- CTA -->
+            <div class="text-center mt-10">
+                <a href="#calcForm" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors shadow-md">
+                    <i data-lucide="arrow-up" class="w-4 h-4"></i>
+                    Usar la calculadora ahora
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Glosario de Términos -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <span class="bg-indigo-100 text-indigo-700 px-4 py-1 rounded-full text-sm font-semibold">GLOSARIO</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mt-4">
+                    Entiende cada término de la calculadora
+                </h2>
+                <p class="text-gray-500 mt-2">Sin tecnicismos. Explicado para que lo entienda cualquiera.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                
+                <!-- ROI -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-emerald-500 text-white w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg flex-shrink-0">
+                            ROI
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 mb-1">Retorno de Inversión</h3>
+                            <p class="text-gray-600 text-sm mb-2">
+                                El porcentaje que ganas (o pierdes) sobre lo que inviertes.
+                            </p>
+                            <div class="bg-gray-50 rounded-lg p-3 text-xs">
+                                <strong class="text-gray-700">Ejemplo:</strong> 
+                                <span class="text-gray-600">Inviertes 100€ y ganas 130€ → ROI = 30%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CPC -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-blue-500 text-white w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg flex-shrink-0">
+                            CPC
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 mb-1">Coste Por Clic</h3>
+                            <p class="text-gray-600 text-sm mb-2">
+                                Lo que pagas cada vez que alguien hace clic en tu anuncio.
+                            </p>
+                            <div class="bg-gray-50 rounded-lg p-3 text-xs">
+                                <strong class="text-gray-700">Ejemplo:</strong> 
+                                <span class="text-gray-600">CPC de 0,50€ = cada visita te cuesta 50 céntimos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tasa de Conversión -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-purple-500 text-white w-12 h-12 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0">
+                            CONV
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 mb-1">Tasa de Conversión</h3>
+                            <p class="text-gray-600 text-sm mb-2">
+                                El porcentaje de visitas que acaban comprando.
+                            </p>
+                            <div class="bg-gray-50 rounded-lg p-3 text-xs">
+                                <strong class="text-gray-700">Ejemplo:</strong> 
+                                <span class="text-gray-600">De 100 visitas, 2 compran → Conversión = 2%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CPA -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-orange-500 text-white w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg flex-shrink-0">
+                            CPA
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 mb-1">Coste Por Adquisición</h3>
+                            <p class="text-gray-600 text-sm mb-2">
+                                Lo que te cuesta conseguir UN cliente. El dato más importante.
+                            </p>
+                            <div class="bg-gray-50 rounded-lg p-3 text-xs">
+                                <strong class="text-gray-700">Ejemplo:</strong> 
+                                <span class="text-gray-600">Gastas 100€ y consigues 2 clientes → CPA = 50€</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Margen -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-teal-500 text-white w-12 h-12 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0">
+                            MRG
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 mb-1">Margen de Beneficio</h3>
+                            <p class="text-gray-600 text-sm mb-2">
+                                Lo que te queda de cada venta después de pagar costes.
+                            </p>
+                            <div class="bg-gray-50 rounded-lg p-3 text-xs">
+                                <strong class="text-gray-700">Ejemplo:</strong> 
+                                <span class="text-gray-600">Vendes a 100€, te cuesta 60€ → Margen = 40€ (40%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Break-even -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-gray-700 text-white w-12 h-12 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0">
+                            B/E
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 mb-1">Punto de Equilibrio</h3>
+                            <p class="text-gray-600 text-sm mb-2">
+                                Las ventas mínimas que necesitas para no perder dinero.
+                            </p>
+                            <div class="bg-gray-50 rounded-lg p-3 text-xs">
+                                <strong class="text-gray-700">Ejemplo:</strong> 
+                                <span class="text-gray-600">Inviertes 500€, margen 50€/venta → Necesitas 10 ventas</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Glosario -->
+            <div class="mt-12 bg-indigo-600 rounded-2xl p-8 text-center">
+                <h3 class="text-xl font-bold text-white mb-2">¿Ya entiendes los términos?</h3>
+                <p class="text-indigo-200 mb-6">Ahora calcula si tu campaña será rentable en menos de 1 minuto</p>
+                <a href="#calcForm" class="inline-flex items-center gap-2 bg-white text-indigo-700 px-8 py-4 rounded-xl font-bold hover:bg-indigo-50 transition-all shadow-lg">
+                    <i data-lucide="zap" class="w-5 h-5"></i>
+                    Calcular mi ROI ahora
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cómo funciona -->
+    <section class="py-16 bg-white">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900">
+                    Así de fácil es saber si tu campaña será rentable
+                </h2>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="relative">
+                    <div class="bg-indigo-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold mb-4">1</div>
+                    <h3 class="font-bold text-gray-900 mb-2">Pon tu precio</h3>
+                    <p class="text-gray-500 text-sm">¿A cuánto vendes tu producto o servicio?</p>
+                    <div class="hidden md:block absolute top-5 left-full w-full h-0.5 bg-indigo-200"></div>
+                </div>
+                <div class="relative">
+                    <div class="bg-indigo-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold mb-4">2</div>
+                    <h3 class="font-bold text-gray-900 mb-2">Indica tu margen</h3>
+                    <p class="text-gray-500 text-sm">¿Qué porcentaje de beneficio tienes?</p>
+                    <div class="hidden md:block absolute top-5 left-full w-full h-0.5 bg-indigo-200"></div>
+                </div>
+                <div class="relative">
+                    <div class="bg-indigo-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold mb-4">3</div>
+                    <h3 class="font-bold text-gray-900 mb-2">Fija tu objetivo</h3>
+                    <p class="text-gray-500 text-sm">¿Cuánto quieres facturar al mes?</p>
+                    <div class="hidden md:block absolute top-5 left-full w-full h-0.5 bg-indigo-200"></div>
+                </div>
+                <div>
+                    <div class="bg-emerald-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold mb-4">✓</div>
+                    <h3 class="font-bold text-gray-900 mb-2">Obtén tu informe</h3>
+                    <p class="text-gray-500 text-sm">Sabrás si ganarás o perderás dinero</p>
+                </div>
+            </div>
+            
+            <!-- CTA -->
+            <div class="text-center mt-12 p-8 bg-gray-50 rounded-2xl">
+                <p class="text-gray-600 mb-4">Solo necesitas <strong>3 datos</strong> y <strong>1 minuto</strong> de tu tiempo</p>
+                <a href="#calcForm" class="inline-flex items-center gap-2 bg-emerald-500 text-white px-8 py-4 rounded-xl font-bold hover:bg-emerald-600 transition-all shadow-lg transform hover:scale-105">
+                    <i data-lucide="play" class="w-5 h-5"></i>
+                    Empezar el cálculo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Errores comunes -->
+    <section class="py-16 bg-red-50">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <span class="bg-red-100 text-red-700 px-4 py-1 rounded-full text-sm font-semibold">EVITA ESTOS ERRORES</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mt-4">
+                    Por qué fracasan la mayoría de campañas
+                </h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl p-6 border-l-4 border-red-400">
+                    <div class="text-red-500 font-bold text-lg mb-2">Error #1</div>
+                    <h3 class="font-bold text-gray-900 mb-2">No conocer tu CPA máximo</h3>
+                    <p class="text-gray-600 text-sm">
+                        Si no sabes cuánto puedes pagar por cliente, no sabes si estás ganando o perdiendo. 
+                        Es como conducir sin mirar el velocímetro.
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 border-l-4 border-red-400">
+                    <div class="text-red-500 font-bold text-lg mb-2">Error #2</div>
+                    <h3 class="font-bold text-gray-900 mb-2">Usar datos inventados</h3>
+                    <p class="text-gray-600 text-sm">
+                        "Creo que convertiré al 5%". No. Usa datos reales de tu sector. 
+                        Nuestra calculadora incluye benchmarks actualizados de 2025.
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 border-l-4 border-red-400">
+                    <div class="text-red-500 font-bold text-lg mb-2">Error #3</div>
+                    <h3 class="font-bold text-gray-900 mb-2">Ignorar el coste de gestión</h3>
+                    <p class="text-gray-600 text-sm">
+                        Si pagas a alguien para gestionar la campaña, ese coste también cuenta. 
+                        No es solo lo que pagas a Google o Facebook.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- CTA Errores -->
+            <div class="text-center mt-10">
+                <p class="text-gray-700 font-medium mb-4">No cometas estos errores. Calcula antes de invertir.</p>
+                <a href="#calcForm" class="inline-flex items-center gap-2 bg-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-600 transition-colors shadow-md">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    Verificar mi rentabilidad
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preguntas frecuentes -->
+    <section class="py-16 bg-white">
+        <div class="max-w-3xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900">
+                    Preguntas frecuentes
+                </h2>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="bg-gray-50 rounded-xl p-5">
+                    <h3 class="font-bold text-gray-900 mb-2">¿Esta calculadora es gratis?</h3>
+                    <p class="text-gray-600 text-sm">Sí, 100% gratis. Solo te pedimos tu email para enviarte el informe completo en PDF.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-5">
+                    <h3 class="font-bold text-gray-900 mb-2">¿De dónde salen los datos de CPC y conversión?</h3>
+                    <p class="text-gray-600 text-sm">Usamos benchmarks de Google Ads 2025 por sector. Son datos reales del mercado, no estimaciones.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-5">
+                    <h3 class="font-bold text-gray-900 mb-2">¿Puedo poner mis propios datos?</h3>
+                    <p class="text-gray-600 text-sm">Sí. En "Configuración Avanzada" puedes modificar el CPC, la tasa de conversión y el presupuesto manualmente.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-5">
+                    <h3 class="font-bold text-gray-900 mb-2">¿El resultado está garantizado?</h3>
+                    <p class="text-gray-600 text-sm">No. Es una estimación basada en datos de mercado. El resultado real depende de cómo ejecutes la campaña, tu web, tu producto, etc.</p>
+                </div>
+            </div>
+            
+            <!-- CTA FAQs -->
+            <div class="mt-10 text-center">
+                <div class="inline-flex items-center gap-3 bg-indigo-50 border border-indigo-200 rounded-2xl p-6">
+                    <div class="bg-indigo-600 w-12 h-12 rounded-xl flex items-center justify-center">
+                        <i data-lucide="sparkles" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="font-bold text-gray-900">¿Listo para descubrir tu ROI?</p>
+                        <p class="text-gray-500 text-sm">Es gratis y tarda menos de 1 minuto</p>
+                    </div>
+                    <a href="#calcForm" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-indigo-700 transition-colors ml-4">
+                        Calcular
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="py-16 bg-gradient-to-r from-indigo-600 to-purple-600">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">
+                ¿Los números te cuadran pero no sabes ejecutar?
+            </h2>
+            <p class="text-indigo-100 text-lg mb-8 max-w-2xl mx-auto">
+                En Azuanet gestionamos campañas de publicidad online desde hace años. 
+                Configuración, optimización diaria e informes mensuales incluidos.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="mailto:info@azuanet.es" class="inline-flex items-center justify-center gap-2 bg-white text-indigo-700 px-8 py-4 rounded-xl font-bold hover:bg-indigo-50 transition-colors shadow-lg">
+                    <i data-lucide="mail" class="w-5 h-5"></i>
+                    info@azuanet.es
+                </a>
+                <a href="https://www.azuanet.es" target="_blank" class="inline-flex items-center justify-center gap-2 bg-indigo-500 text-white px-8 py-4 rounded-xl font-bold hover:bg-indigo-400 transition-colors">
+                    <i data-lucide="globe" class="w-5 h-5"></i>
+                    www.azuanet.es
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="bg-gray-900 text-gray-400 py-10">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-4">
+                    <img src="https://calculadoraroi.azuanet.es/css/logoazuanet_200x100.png" alt="Azuanet" class="h-10 opacity-80">
+                    <div class="text-sm">
+                        <div class="text-white font-semibold">Azuanet Soluciones Web S.L.</div>
+                        <div class="text-emerald-400 font-medium">🏆 Desde 2002 generando resultados</div>
+                    </div>
+                </div>
+                <div class="text-center md:text-right text-sm">
+                    <p>+20 años ayudando a empresas a crecer online</p>
+                    <p class="mt-1">
+                        <a href="https://www.azuanet.es" class="text-indigo-400 hover:text-indigo-300">www.azuanet.es</a> · 
+                        <a href="mailto:info@azuanet.es" class="text-indigo-400 hover:text-indigo-300">info@azuanet.es</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botón flotante para ir a la calculadora -->
+    <a href="#calcForm" id="floatingCTA" class="fixed bottom-6 right-6 bg-indigo-600 text-white px-5 py-3 rounded-full font-bold shadow-2xl hover:bg-indigo-700 transition-all transform hover:scale-105 z-50 hidden md:flex items-center gap-2">
+        🧮 Usar calculadora
+    </a>
+
+    <script>
+        // Mostrar/ocultar botón flotante según el scroll
+        window.addEventListener('scroll', function() {
+            const floatingCTA = document.getElementById('floatingCTA');
+            const calcForm = document.getElementById('calcForm');
+            if (calcForm) {
+                const formRect = calcForm.getBoundingClientRect();
+                if (formRect.bottom < 0) {
+                    floatingCTA.classList.remove('hidden');
+                    floatingCTA.classList.add('flex');
+                } else {
+                    floatingCTA.classList.add('hidden');
+                    floatingCTA.classList.remove('flex');
+                }
+            }
+        });
+        
+        // Asegurar que todos los iconos de Lucide se rendericen
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+        });
+        window.addEventListener('load', function() {
+            lucide.createIcons();
+        });
+    </script>
+
+</body>
+</html>
